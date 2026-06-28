@@ -17,8 +17,6 @@ CNPJ/                                   [GitHub]
 ├── references.bib                      [GitHub]
 ├── report.tex                          [GitHub]
 ├── report.pdf                          [GitHub]
-├── report.aux / .log / .out / …       [—]  LaTeX 编译临时文件
-├── local_screening_results.json        [—]  旧版实验残留
 │
 ├── data/
 │   ├── __init__.py                     [GitHub]
@@ -56,19 +54,17 @@ CNPJ/                                   [GitHub]
 ├── run_visualization.py                [GitHub]
 ├── generate_figures.py                 [GitHub]
 │
-├── report_figures/                     [GitHub]
-│   ├── loss_ablation.png
-│   ├── arch_screening.png
-│   ├── multiseed_stability.png
-│   ├── full_train.png
-│   ├── final_result.png
-│   ├── signal_bin_bar.png
-│   ├── param_efficiency.png
-│   ├── triplet_best.png
-│   ├── triplet_median.png
-│   └── triplet_worst.png
-│
-└── .DS_Store / __pycache__ / …        [—]  系统文件，未上传
+└── report_figures/                     [GitHub]
+    ├── loss_ablation.png
+    ├── arch_screening.png
+    ├── multiseed_stability.png
+    ├── full_train.png
+    ├── final_result.png
+    ├── signal_bin_bar.png
+    ├── param_efficiency.png
+    ├── triplet_best.png
+    ├── triplet_median.png
+    └── triplet_worst.png
 ```
 
 详细复现指导见报告附录（`report.pdf` 第 18--19 页）。
@@ -147,7 +143,7 @@ xelatex report.tex && xelatex report.tex
 **U-Net 32ch** — test PSNR 48.14 dB (gain 2.68 dB), 跨种子 2σ=0.19 dB, 7.76M 参数。
 单次训练即可获得稳定结果，适合科研复现与批量部署。
 
-### 纯精度最优（需额外验证种子）
+### 纯精度最优（种子稳定性略差）
 **SE-UNet 32ch** — test PSNR 48.23 dB (gain 2.77 dB), 7.85M 参数。
 仅 +1.1% 参数增量换取 +0.09 dB 提升。3 种子中 1 例训练失效 (2σ=1.77 dB)，
 建议至少运行 5–10 次独立种子训练，选取验证集最优 checkpoint。
@@ -171,4 +167,3 @@ xelatex report.tex && xelatex report.tex
 - **百度网盘**（链接见"数据准备"）：`experiments/` 下载后解压至 `CNPJ/experiments/`
 - **数据集**：课程原始数据，请自行放置至 `data/raw/`（结构见上方项目结构）
 - **预处理缓存**：`data/preprocessed/` 由 `preprocess.py` 自动生成
-- **垃圾文件（.DS_Store / __pycache__ / LaTeX 临时文件 等）**：未上传
