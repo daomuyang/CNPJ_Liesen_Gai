@@ -1,0 +1,90 @@
+{
+  "pipeline": "local_small_scale_screening",
+  "design": "三阶段筛选 + 多种子稳定性 (参考 修改建议.txt)",
+  "data": "UK Biobank T1 MRI 去噪, ~600 cases, 本地用120例筛选",
+  "stageA_loss_ablation": {
+    "n_cases": 65,
+    "results": {
+      "stageA_loss_L1_only": {
+        "best_val_gain": 2.0216623183894953,
+        "model": "unet",
+        "elapsed_min": 16.039511879285175
+      },
+      "stageA_loss_L1_SSIM_0.2": {
+        "best_val_gain": 2.0216623183894953,
+        "model": "unet",
+        "elapsed_min": 18.46804951429367
+      }
+    }
+  },
+  "stageB_architecture_screening": {
+    "n_cases": 120,
+    "max_steps": 1500,
+    "results": [
+      {
+        "name": "stageB_screen_UNetPP_Lite",
+        "model": "unetpp_lite",
+        "best_val_gain": 2.630932719667804,
+        "n_params": 1996257,
+        "elapsed_min": 44.62554286321004
+      },
+      {
+        "name": "stageB_screen_UNet_32ch",
+        "model": "unet",
+        "best_val_gain": 2.576835933317625,
+        "n_params": 7762465,
+        "elapsed_min": 49.13707120021184
+      },
+      {
+        "name": "stageB_screen_RED_CNN",
+        "model": "red_cnn",
+        "best_val_gain": 2.469197284214232,
+        "n_params": 1015968,
+        "elapsed_min": 32.750536700089775
+      },
+      {
+        "name": "stageB_screen_UNet_64ch",
+        "model": "unet",
+        "best_val_gain": 2.3959027030907976,
+        "n_params": 31036481,
+        "elapsed_min": 135.51556185086568
+      },
+      {
+        "name": "stageB_screen_DnCNN_17",
+        "model": "dncnn",
+        "best_val_gain": 1.4034846881307672,
+        "n_params": 556032,
+        "elapsed_min": 46.938441983858745
+      }
+    ]
+  },
+  "stageC_multiseed": {
+    "n_cases": 120,
+    "max_steps": 1000,
+    "model": "UNetPP_Lite",
+    "gains": {
+      "seed_42": 2.5284506269480715
+    }
+  },
+  "recommendations": {
+    "loss_config": "L1_weight=1.0, SSIM_weight=0.2",
+    "tier1_models": [
+      {
+        "name": "stageB_screen_UNetPP_Lite",
+        "model": "unetpp_lite",
+        "best_val_gain": 2.630932719667804,
+        "n_params": 1996257,
+        "elapsed_min": 44.62554286321004
+      },
+      {
+        "name": "stageB_screen_UNet_32ch",
+        "model": "unet",
+        "best_val_gain": 2.576835933317625,
+        "n_params": 7762465,
+        "elapsed_min": 49.13707120021184
+      }
+    ],
+    "server_training": "全量600例, max_steps=5000, eval_every=200",
+    "note": "Stage C seeds 123/456 未完成, 已完成 seed 42 的 UNetPP_Lite 稳定性参考"
+  }
+}
